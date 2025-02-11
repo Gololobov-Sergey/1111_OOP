@@ -1,3 +1,6 @@
+import random
+
+
 class Human:
     def __init__(self, name, house, car=None, job=None):
         self.name = name
@@ -8,25 +11,64 @@ class Human:
         self.gladness = 50
 
     def shoping(self):
-        pass
+        if self.car == None:
+            print("Ідем в магазин пішки")
+        else:
+            self.car.drive(random.randint(10, 50))
+        self.money -= random.randint(5, 15)
+        self.house.food += random.randint(1, 5)
+
 
     def work(self):
-        pass
+        salary = random.randint(40, 50)
+        self.money += salary
+        print(f"Сьогодні працюємо. Заробили {salary}$")
 
     def eat(self):
-        pass
+        self.gladness += 5
+        food = random.randint(1,5)
+        if self.house.food - food > 0:
+            self.house.food -= food
+            print("Ми трошки поїли")
+        else:
+            print("Поїсти не вдалося, холодильник пустий")
+
 
     def chill(self):
-        pass
+        print("Сьогодні ми відпочиваємо")
+        self.money -= random.randint(5, 10)
+        self.house.pollution += random.randint(1, 5)
+        self.gladness += random.randint(5, 10)
 
     def cleaning(self):
-        pass
+        percent = random.randint(1, 5)
+        if percent == 5:
+            print("Сьогодні генеральне приберання")
+            self.house.pollution = 0
+        else:
+            print("Сьогодні тільки повитирали пилюку")
+            self.house.pollution = max(0, self.house.pollution - random.randint(1, 3))
 
     def info(self):
-        pass
+        print(f"Гроші - {self.money}$")
+        print(f"Задоволення - {self.gladness}")
+        print(self.house)
+        if self.car != None:
+            print(self.car)
 
-    def live(self):
-        pass
+    def live(self, day):
+        print(f" ---- День №{day} ----")
+        #####################################
+        self.work()
+        self.shoping()
+        self.eat()
+        self.chill()
+
+        if day % 5 == 0:
+            self.cleaning()
+
+        self.info()
+        print()
 
     def is_alive(self):
         if self.money < 0:
@@ -42,7 +84,7 @@ class Car:
     def drive(self, length):
         rashod = length * 0.1
         if self.fuel - rashod < 0:
-            print("Подорож не можлива, не вистачає пального")
+            print("Подорож на авто не можлива, не вистачає пального, треба йти пішки")
         else:
             self.fuel -= rashod
             self.state -= length * 0.01
@@ -57,7 +99,7 @@ class Car:
             print("Бак повний!")
 
     def __str__(self):
-        pass
+        return f"Авто: {self.model}, пальне - {self.fuel}л, справність - {self.state}%"
 
 
 class Job:
@@ -74,5 +116,11 @@ class House:
         self.food = 0
 
     def __str__(self):
-        print(f"Будинок: запас їжі - {self.food}, забрудненність - {self.pollution}")
+        return f"Будинок: запас їжі - {self.food}, забрудненність - {self.pollution}"
 
+
+human = Human("Vasya", job=Job("Програміст", 1000), house=House())
+for day in range(1, 366):
+    if human.is_alive() == False:
+        break
+    human.live(day)
