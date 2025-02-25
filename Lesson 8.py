@@ -55,16 +55,22 @@ def check_value(var1):
 
 result = []
 def divider(a, b):
-    # if a < b:
-    #     raise ValueError
-    # if b > 100:
-    #     raise IndexError
-    return a/b
+    if (type(a) == int or type(a) == float) and (type(b) == int or type(b) == float):
+        if b != 0:
+            return a/b
+        else:
+            raise ZeroDivisionError
+    else:
+        raise ValueError
 
-data = {10: 2, 2: 5, "123": 4, 18: 0, []: 15, 8 : 4} #"123": 4, 18: 0, []: 15, 8 : 4
+data = {10: 2, 2: 5, "123": 4, 18: 0, 15:[], 8 : 4} #"123": 4, 18: 0, []: 15, 8 : 4
 
-for key in data:
-    res = divider(key, data[key])
-    result.append(res)
+for key in data.keys():
+    try:
+        res = divider(key, data[key])
+        result.append(res)
+    except:
+        print("Error data")
 
 print(result)
+
